@@ -260,5 +260,5 @@ paket-files/
 __pycache__/
 *.pyc
 
-# QT_SDK Definition
+# VBOX_SDK Definition
 VBOXSDK_path.props
