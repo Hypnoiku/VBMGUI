@@ -5,6 +5,7 @@
 #include "VirtualBox_i.c"
 #include <iostream>
 #include <QMessageBox>
+#include <string>
 
 IVirtualBox *virtualBox;
 ISession *session;
@@ -72,12 +73,15 @@ VBMGUI::VBMGUI(QWidget *parent)
 					for (ULONG i = 0; i < mediumArray->rgsabound[0].cElements; ++i)
 					{
 						BSTR str;
+						LONG64 size = 0;
 
 						rc = mediums[i]->get_Name(&str);
+						rc = mediums[i]->get_Size(&size);
+
 						if (SUCCEEDED(rc))
 						{
 							ui.label->setText(QString(_com_util::ConvertBSTRToString(str)));
-							ui.listWidget_2->addItem(QString(_com_util::ConvertBSTRToString(str)));
+							ui.listWidget_2->addItem(QString(((std::string)_com_util::ConvertBSTRToString(str) + " - " + std::to_string(size)).c_str()));
 							SysFreeString(str);
 						}
 					}
@@ -89,7 +93,7 @@ VBMGUI::VBMGUI(QWidget *parent)
 			}
 		}
 		else
-			QMessageBox::critical(this, "Critical error", QString("Error creating VirtualBox instance!rc = 0x" + rc));
+			QMessageBox::critical(this, "Critical error", QString("Error creating VirtualBox instance!rc = 0x" && rc));
 	}
 }
 
