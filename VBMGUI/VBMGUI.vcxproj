@@ -135,6 +135,7 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="About.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="VBMGUI.cpp" />
   </ItemGroup>
@@ -142,12 +143,14 @@
     <QtMoc Include="VBMGUI.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="About.ui" />
     <QtUic Include="VBMGUI.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="VBMGUI.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="About.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

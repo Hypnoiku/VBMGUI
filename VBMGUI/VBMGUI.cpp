@@ -168,6 +168,33 @@ void VBMGUI::progressBarStart(IProgress *progress)
 
 void VBMGUI::closeEvent(QCloseEvent *event)
 {
+	endApp();
+}
+
+void VBMGUI::endApp()
+{
 	virtualBox->Release();
 	virtualBoxClient->Release();
+	QApplication::quit();
+}
+
+void VBMGUI::openAboutUI() {
+	HRESULT rc;
+	BSTR VBoxVer;
+	BSTR VBoxSDKVer;
+	if (virtualBox != NULL)
+	{
+		rc = virtualBox->get_Version(&VBoxVer);
+		rc = virtualBox->get_APIVersion(&VBoxSDKVer);
+	}
+
+	if (FAILED(rc) || virtualBox == NULL)
+	{
+		QMessageBox::critical(this, "Fatal error", QString("VirtualBox COM interface is missing! Exiting!"));
+		QApplication::quit();
+	}
+
+	About *about = new About();
+	about->getVers(QString(_com_util::ConvertBSTRToString(VBoxVer)), QString(_com_util::ConvertBSTRToString(VBoxSDKVer)));
+	about->show();
 }

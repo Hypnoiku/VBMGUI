@@ -131,6 +131,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
@@ -144,6 +145,11 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
@@ -168,7 +174,7 @@
   </connection>
   <connection>
    <sender>pushButton_2</sender>
-   <signal>pressed()</signal>
+   <signal>clicked()</signal>
    <receiver>VBMGUIClass</receiver>
    <slot>compactHDD()</slot>
    <hints>
@@ -182,9 +188,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>triggered()</signal>
+   <receiver>VBMGUIClass</receiver>
+   <slot>openAboutUI()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>startVM()</slot>
   <slot>compactHDD()</slot>
+  <slot>openAboutUI()</slot>
  </slots>
 </ui>

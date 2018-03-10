@@ -31,6 +31,7 @@ QT_BEGIN_NAMESPACE
 class Ui_VBMGUIClass
 {
 public:
+    QAction *actionAbout;
     QWidget *centralWidget;
     QLabel *label;
     QPushButton *pushButton;
@@ -52,6 +53,8 @@ public:
         if (VBMGUIClass->objectName().isEmpty())
             VBMGUIClass->setObjectName(QStringLiteral("VBMGUIClass"));
         VBMGUIClass->resize(600, 400);
+        actionAbout = new QAction(VBMGUIClass);
+        actionAbout->setObjectName(QStringLiteral("actionAbout"));
         centralWidget = new QWidget(VBMGUIClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         label = new QLabel(centralWidget);
@@ -100,10 +103,12 @@ public:
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuHelp->menuAction());
+        menuHelp->addAction(actionAbout);
 
         retranslateUi(VBMGUIClass);
         QObject::connect(pushButton, SIGNAL(clicked()), VBMGUIClass, SLOT(startVM()));
-        QObject::connect(pushButton_2, SIGNAL(pressed()), VBMGUIClass, SLOT(compactHDD()));
+        QObject::connect(pushButton_2, SIGNAL(clicked()), VBMGUIClass, SLOT(compactHDD()));
+        QObject::connect(actionAbout, SIGNAL(triggered()), VBMGUIClass, SLOT(openAboutUI()));
 
         tabWidget->setCurrentIndex(1);
         listWidget->setCurrentRow(-1);
@@ -115,6 +120,7 @@ public:
     void retranslateUi(QMainWindow *VBMGUIClass)
     {
         VBMGUIClass->setWindowTitle(QApplication::translate("VBMGUIClass", "VBMGUI", nullptr));
+        actionAbout->setText(QApplication::translate("VBMGUIClass", "About", nullptr));
         label->setText(QApplication::translate("VBMGUIClass", "TextLabel", nullptr));
         pushButton->setText(QApplication::translate("VBMGUIClass", "Start VM", nullptr));
         pushButton_2->setText(QApplication::translate("VBMGUIClass", "Compact HDD", nullptr));
