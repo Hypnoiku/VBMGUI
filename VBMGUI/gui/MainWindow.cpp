@@ -1,4 +1,4 @@
-#include "VBMGUI.h"
+#include "MainWindow.h"
 #include <comutil.h>
 #include <comdef.h>
 #include "VirtualBox.h"
@@ -11,7 +11,7 @@ IVirtualBox *virtualBox;
 ISession *session;
 IVirtualBoxClient *virtualBoxClient;
 
-VBMGUI::VBMGUI(QWidget *parent)
+MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
@@ -97,7 +97,7 @@ VBMGUI::VBMGUI(QWidget *parent)
 	}
 }
 
-void VBMGUI::startVM()
+void MainWindow::startVM()
 {
 	HRESULT rc;
 	int pos = ui.listWidget->currentRow();
@@ -123,7 +123,7 @@ void VBMGUI::startVM()
 	progressBarStart(progress);
 }
 
-void VBMGUI::compactHDD()
+void MainWindow::compactHDD()
 {
 	HRESULT rc;
 	int pos = ui.listWidget_2->currentRow();
@@ -153,7 +153,7 @@ void VBMGUI::compactHDD()
 	progressBarStart(progress);
 }
 
-void VBMGUI::progressBarStart(IProgress *progress)
+void MainWindow::progressBarStart(IProgress *progress)
 {
 	/*ULONG *pBvalue = 0;
 
@@ -166,19 +166,19 @@ void VBMGUI::progressBarStart(IProgress *progress)
 	thread.connect(this, SIGNAL(signalProgress(int)), ui.progressBar, SLOT(setValue(int)));*/
 }
 
-void VBMGUI::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent(QCloseEvent *event)
 {
 	endApp();
 }
 
-void VBMGUI::endApp()
+void MainWindow::endApp()
 {
 	virtualBox->Release();
 	virtualBoxClient->Release();
 	QApplication::quit();
 }
 
-void VBMGUI::openAboutUI() {
+void MainWindow::openAboutUI() {
 	HRESULT rc;
 	BSTR VBoxVer;
 	BSTR VBoxSDKVer;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>VBMGUIClass</class>
- <widget class="QMainWindow" name="VBMGUIClass">
+ <class>MainWindowClass</class>
+ <widget class="QMainWindow" name="MainWindowClass">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -153,13 +153,13 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="VBMGUI.qrc"/>
+  <include location="MainWindow.qrc"/>
  </resources>
  <connections>
   <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
-   <receiver>VBMGUIClass</receiver>
+   <receiver>MainWindowClass</receiver>
    <slot>startVM()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -175,7 +175,7 @@
   <connection>
    <sender>pushButton_2</sender>
    <signal>clicked()</signal>
-   <receiver>VBMGUIClass</receiver>
+   <receiver>MainWindowClass</receiver>
    <slot>compactHDD()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -191,7 +191,7 @@
   <connection>
    <sender>actionAbout</sender>
    <signal>triggered()</signal>
-   <receiver>VBMGUIClass</receiver>
+   <receiver>MainWindowClass</receiver>
    <slot>openAboutUI()</slot>
    <hints>
     <hint type="sourcelabel">

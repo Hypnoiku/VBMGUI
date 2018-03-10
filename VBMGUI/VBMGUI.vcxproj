@@ -135,26 +135,26 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="About.cpp" />
+    <ClCompile Include="gui\About.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="VBMGUI.cpp" />
+    <ClCompile Include="gui\MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="VBMGUI.h" />
+    <QtMoc Include="gui\MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="About.ui" />
-    <QtUic Include="VBMGUI.ui" />
+    <QtUic Include="gui\About.ui">
+      <SubType>Designer</SubType>
+    </QtUic>
+    <QtUic Include="gui\MainWindow.ui">
+      <SubType>Designer</SubType>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="VBMGUI.qrc" />
+    <QtMoc Include="gui\About.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="About.h" />
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="VBMGUI.rc" />
+    <QtRcc Include="gui\MainWindow.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

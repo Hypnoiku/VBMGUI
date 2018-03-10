@@ -33,40 +33,35 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VBMGUI.cpp">
+    <ClCompile Include="gui\About.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="About.cpp">
+    <ClCompile Include="gui\MainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="VBMGUI.h">
+    <QtMoc Include="gui\About.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="About.h">
+    <QtMoc Include="gui\MainWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="VBMGUI.ui">
+    <QtUic Include="gui\About.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="About.ui">
+    <QtUic Include="gui\MainWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="VBMGUI.qrc">
+    <ResourceCompile Include="gui\MainWindow.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="gui\MainWindow.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="VBMGUI.rc" />
   </ItemGroup>
 </Project>
