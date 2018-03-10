@@ -262,3 +262,6 @@ __pycache__/
 
 # VBOX_SDK Definition
 VBOXSDK_path.props
+
+# QtSDK Definition
+GeneratedFiles
