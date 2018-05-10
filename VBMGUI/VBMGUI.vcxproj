@@ -135,9 +135,11 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="err.cpp" />
     <ClCompile Include="gui\About.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="gui\MainWindow.cpp" />
+    <ClCompile Include="VBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="gui\MainWindow.h" />
@@ -155,6 +157,10 @@
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="gui\MainWindow.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="err.h" />
+    <ClInclude Include="VBox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

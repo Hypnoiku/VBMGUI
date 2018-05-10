@@ -39,6 +39,12 @@
     <ClCompile Include="gui\MainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="VBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="err.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="gui\About.h">
@@ -57,11 +63,16 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="gui\MainWindow.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <QtRcc Include="gui\MainWindow.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="VBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="err.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,122 +2,57 @@
 #include <comutil.h>
 #include <comdef.h>
 #include "VirtualBox.h"
-#include "VirtualBox_i.c"
 #include <iostream>
 #include <QMessageBox>
-#include <string>
-
-IVirtualBox *virtualBox;
-ISession *session;
-IVirtualBoxClient *virtualBoxClient;
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
 
-	/* Initialize the COM subsystem. */
-	CoInitialize(NULL);
-
-	HRESULT rc;
-	/* Instantiate the VirtualBox root object. */
-	rc = CoCreateInstance(CLSID_VirtualBoxClient, /* the VirtualBoxClient object */
-		NULL,                   /* no aggregation */
-		CLSCTX_INPROC_SERVER,   /* the object lives in the current process */
-		IID_IVirtualBoxClient,  /* IID of the interface */
-		(void**)&virtualBoxClient);
-	if (SUCCEEDED(rc))
+	if(virtualBox.error)
 	{
-		rc = virtualBoxClient->get_VirtualBox(&virtualBox);
-		if (SUCCEEDED(rc))
+		QMessageBox::critical(this, "Critical error", QString::fromStdString(errors.buildErrMsg(0, virtualBox.errorCode)));
+	}
+	else
+	{
+		virtualBox.getMachines();
+
+		if (virtualBox.error)
 		{
-			SAFEARRAY *machinesArray = NULL;
-
-			rc = virtualBox->get_Machines(&machinesArray);
-			if (SUCCEEDED(rc))
-			{
-				IMachine **machines;
-
-				rc = SafeArrayAccessData(machinesArray, (void **)&machines);
-				if (SUCCEEDED(rc))
-				{
-					for (ULONG i = 0; i < machinesArray->rgsabound[0].cElements; ++i)
-					{
-						BSTR str;
-
-						rc = machines[i]->get_Name(&str);
-						if (SUCCEEDED(rc))
-						{
-							ui.label->setText(QString(_com_util::ConvertBSTRToString(str)));
-							ui.listWidget->addItem(QString(_com_util::ConvertBSTRToString(str)));
-							SysFreeString(str);
-						}
-					}
-
-					SafeArrayUnaccessData(machinesArray);
-				}
-
-				SafeArrayDestroy(machinesArray);
-			}
-
-			SAFEARRAY *mediumArray = NULL;
-			
-			rc = virtualBox->get_HardDisks(&mediumArray);
-			if (SUCCEEDED(rc))
-			{
-				IMedium **mediums;
-
-				rc = SafeArrayAccessData(mediumArray, (void **)&mediums);
-				if (SUCCEEDED(rc))
-				{
-					for (ULONG i = 0; i < mediumArray->rgsabound[0].cElements; ++i)
-					{
-						BSTR str;
-						LONG64 size = 0;
-
-						rc = mediums[i]->get_Name(&str);
-						rc = mediums[i]->get_Size(&size);
-
-						if (SUCCEEDED(rc))
-						{
-							ui.label->setText(QString(_com_util::ConvertBSTRToString(str)));
-							ui.listWidget_2->addItem(QString(((std::string)_com_util::ConvertBSTRToString(str) + " - " + std::to_string(size)).c_str()));
-							SysFreeString(str);
-						}
-					}
-
-					SafeArrayUnaccessData(mediumArray);
-				}
-
-				SafeArrayDestroy(mediumArray);
-			}
+			QMessageBox::critical(this, "Critical error", QString::fromStdString(errors.buildErrMsg(1, virtualBox.errorCode)));
 		}
 		else
-			QMessageBox::critical(this, "Critical error", QString("Error creating VirtualBox instance!rc = 0x" && rc));
+		{
+			for (ULONG i = 0; i < virtualBox.machineAmount; i++)
+			{
+				ui.listWidget->addItem(QString::fromStdString(virtualBox.machineNames[i]));
+			}
+		}
+
+		virtualBox.getMediums();
+
+		if (virtualBox.error)
+		{
+			QMessageBox::critical(this, "Critical error", QString::fromStdString(errors.buildErrMsg(1, virtualBox.errorCode)));
+		}
+		else
+		{
+			for (ULONG i = 0; i < virtualBox.machineAmount; i++)
+			{
+				ui.listWidget_2->addItem(QString::fromStdString(virtualBox.mediumNames[i] + " - " += std::to_string(virtualBox.mediumSizes[i])));
+			}
+		}
 	}
 }
 
 void MainWindow::startVM()
 {
-	HRESULT rc;
-	int pos = ui.listWidget->currentRow();
-	IProgress *progress;
-	ULONG *pBvalue = 0;
-	SAFEARRAY *machinesArray = NULL;
+	IProgress *progress = virtualBox.startMachine(ui.listWidget->currentRow());
 
-	rc = virtualBox->get_Machines(&machinesArray);
-	if (SUCCEEDED(rc))
+	if (virtualBox.error)
 	{
-		IMachine **machines;
-		rc = SafeArrayAccessData(machinesArray, (void **)&machines);
-		if (SUCCEEDED(rc))
-		{
-			rc = virtualBoxClient->get_Session(&session);
-			machines[ui.listWidget->currentRow()]->LaunchVMProcess(session, _com_util::ConvertStringToBSTR("gui"), NULL, &progress);
-			SafeArrayUnaccessData(machinesArray);
-		}
-
-		SafeArrayDestroy(machinesArray);
+		QMessageBox::critical(this, "Critical error", QString::fromStdString(errors.buildErrMsg(5, virtualBox.errorCode)));
 	}
 
 	progressBarStart(progress);
@@ -125,29 +60,11 @@ void MainWindow::startVM()
 
 void MainWindow::compactHDD()
 {
-	HRESULT rc;
-	int pos = ui.listWidget_2->currentRow();
-	IProgress *progress;
-	ULONG *pBvalue = 0;
-	SAFEARRAY *mediumArray = NULL;
+	IProgress *progress = virtualBox.compactMedium(ui.listWidget_2->currentRow());
 
-	rc = virtualBox->get_HardDisks(&mediumArray);
-	if (SUCCEEDED(rc))
+	if(virtualBox.error)
 	{
-		IMedium **mediums;
-
-		rc = SafeArrayAccessData(mediumArray, (void **)&mediums);
-		if (SUCCEEDED(rc))
-		{
-			rc = mediums[pos]->Compact(&progress);
-			if (FAILED(rc))
-			{
-				QMessageBox::critical(this, "Critical error", QString("Error compacting HDD!rc = 0x" + rc));
-			}
-			SafeArrayUnaccessData(mediumArray);
-		}
-
-		SafeArrayDestroy(mediumArray);
+		QMessageBox::critical(this, "Critical error", QString::fromStdString(errors.buildErrMsg(2, virtualBox.errorCode)));
 	}
 
 	progressBarStart(progress);
@@ -173,28 +90,31 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::endApp()
 {
-	virtualBox->Release();
-	virtualBoxClient->Release();
 	QApplication::quit();
 }
 
-void MainWindow::openAboutUI() {
-	HRESULT rc;
-	BSTR VBoxVer;
-	BSTR VBoxSDKVer;
-	if (virtualBox != NULL)
-	{
-		rc = virtualBox->get_Version(&VBoxVer);
-		rc = virtualBox->get_APIVersion(&VBoxSDKVer);
-	}
+void MainWindow::openAboutUI()
+{
+	std::string VBoxVer, VBoxSDKVer;
+	virtualBox.getVBoxVers(VBoxVer, VBoxSDKVer);
 
-	if (FAILED(rc) || virtualBox == NULL)
+	if (virtualBox.error == 1)
 	{
-		QMessageBox::critical(this, "Fatal error", QString("VirtualBox COM interface is missing! Exiting!"));
+		QMessageBox::critical(this, "Critical error", QString::fromStdString(errors.buildErrMsg(4, virtualBox.errorCode)));
+		QApplication::quit();
+	}
+	else if(virtualBox.error == 2)
+	{
+		QMessageBox::critical(this, "Fatal error", QString::fromStdString(errors.getErrMsg(3)));
 		QApplication::quit();
 	}
 
 	About *about = new About();
-	about->getVers(QString(_com_util::ConvertBSTRToString(VBoxVer)), QString(_com_util::ConvertBSTRToString(VBoxSDKVer)));
+	about->getVers(QString::fromStdString(VBoxVer), QString::fromStdString(VBoxSDKVer));
 	about->show();
+}
+
+void MainWindow::openAboutQt()
+{
+	QMessageBox::aboutQt(this, "VBMGUI");
 }
