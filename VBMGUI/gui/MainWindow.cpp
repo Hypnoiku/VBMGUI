@@ -101,17 +101,18 @@ void MainWindow::openAboutUI()
 	if (virtualBox.error == 1)
 	{
 		QMessageBox::critical(this, "Critical error", QString::fromStdString(errors.buildErrMsg(4, virtualBox.errorCode)));
-		QApplication::quit();
 	}
 	else if(virtualBox.error == 2)
 	{
 		QMessageBox::critical(this, "Fatal error", QString::fromStdString(errors.getErrMsg(3)));
 		QApplication::quit();
 	}
-
-	About *about = new About();
-	about->getVers(QString::fromStdString(VBoxVer), QString::fromStdString(VBoxSDKVer));
-	about->show();
+	else
+	{
+		About *about = new About();
+		about->getVers(QString::fromStdString(VBoxVer), QString::fromStdString(VBoxSDKVer));
+		about->show();
+	}
 }
 
 void MainWindow::openAboutQt()
