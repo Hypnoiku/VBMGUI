@@ -148,8 +148,18 @@ IProgress* VBox::startMachine(int position)
 			machines[position]->LaunchVMProcess(session, _com_util::ConvertStringToBSTR("gui"), NULL, &progress);
 			SafeArrayUnaccessData(machinesArray);
 		}
+		else
+		{
+			error = 1;
+			errorCode = rc;
+		}
 
 		SafeArrayDestroy(machinesArray);
+	}
+	else
+	{
+		error = 1;
+		errorCode = rc;
 	}
 
 	return progress;
@@ -180,8 +190,18 @@ IProgress* VBox::compactMedium(int position)
 			}
 			SafeArrayUnaccessData(mediumArray);
 		}
+		else
+		{
+			error = 1;
+			errorCode = rc;
+		}
 
 		SafeArrayDestroy(mediumArray);
+	}
+	else
+	{
+		error = 1;
+		errorCode = rc;
 	}
 
 	return progress;
@@ -224,6 +244,12 @@ void VBox::resetError()
 
 VBox::~VBox()
 {
-	virtualBox->Release();
-	virtualBoxClient->Release();
+	if(virtualBox != NULL)
+	{
+		virtualBox->Release();
+	}
+	if(virtualBoxClient != NULL)
+	{
+		virtualBoxClient->Release();
+	}
 }
