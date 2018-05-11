@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ui.setupUi(this);
 
+	this->setWindowFlags(this->windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+
 	if(virtualBox.error)
 	{
 		QMessageBox::critical(this, "Critical error", QString::fromStdString(errors.buildErrMsg(0, virtualBox.errorCode)));
@@ -24,9 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
 		}
 		else
 		{
-			for (ULONG i = 0; i < virtualBox.machineAmount; i++)
+			for (int i = 0; i < virtualBox.machineAmount; i++)
 			{
-				ui.listWidget->addItem(QString::fromStdString(virtualBox.machineNames[i]));
+				ui.VMList->addItem(QString::fromStdString(virtualBox.machineNames[i]));
 			}
 		}
 
@@ -38,14 +40,21 @@ MainWindow::MainWindow(QWidget *parent)
 		}
 		else
 		{
-			for (ULONG i = 0; i < virtualBox.mediumAmount; i++)
+			for (int i = 0; i < virtualBox.mediumAmount; i++)
 			{
 				std::string type = virtualBox.mediumSize.type[i];
 				std::string maxType = virtualBox.mediumSize.maxType[i];
 				std::stringstream size, maxSize;
 				size << std::fixed << std::setprecision(2) << virtualBox.mediumSize.sizes[i];
 				maxSize << std::fixed << std::setprecision(2) << virtualBox.mediumSize.maxSizes[i];
-				ui.listWidget_2->addItem(QString::fromStdString(virtualBox.mediumNames[i] + " - " += size.str() + " " + type + " | Max Size: " + maxSize.str() + " " + maxType));
+
+				QStringList itemStList;
+				itemStList << QString::fromStdString(virtualBox.mediumNames[i]);
+				itemStList << QString::fromStdString(size.str() + " " + type);
+				itemStList << QString::fromStdString(maxSize.str() + " " + maxType);
+				QTreeWidgetItem *item = new QTreeWidgetItem(itemStList);
+
+				ui.HDDList->addTopLevelItem(item);
 			}
 		}
 	}
@@ -53,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::startVM()
 {
-	IProgress *progress = virtualBox.startMachine(ui.listWidget->currentRow());
+	IProgress *progress = virtualBox.startMachine(ui.VMList->currentRow());
 
 	if (virtualBox.error)
 	{
@@ -65,7 +74,7 @@ void MainWindow::startVM()
 
 void MainWindow::compactHDD()
 {
-	IProgress *progress = virtualBox.compactMedium(ui.listWidget_2->currentRow());
+	IProgress *progress = virtualBox.compactMedium(ui.HDDList->indexOfTopLevelItem(ui.HDDList->currentItem()));
 
 	if(virtualBox.error)
 	{
