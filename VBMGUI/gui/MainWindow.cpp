@@ -3,6 +3,7 @@
 #include <comdef.h>
 #include "VirtualBox.h"
 #include <QMessageBox>
+#include <iomanip>
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -39,7 +40,11 @@ MainWindow::MainWindow(QWidget *parent)
 		{
 			for (ULONG i = 0; i < virtualBox.mediumAmount; i++)
 			{
-				ui.listWidget_2->addItem(QString::fromStdString(virtualBox.mediumNames[i] + " - " += std::to_string(virtualBox.mediumSizes[i])));
+				std::stringstream size;
+				std::stringstream maxSize;
+				size << std::fixed << std::setprecision(2) << virtualBox.mediumSizes[i];
+				maxSize << std::fixed << std::setprecision(2) << virtualBox.mediumMaxSizes[i];
+				ui.listWidget_2->addItem(QString::fromStdString(virtualBox.mediumNames[i] + " - " += size.str() + " GB | Max Size: " + maxSize.str() + " GB"));
 			}
 		}
 	}

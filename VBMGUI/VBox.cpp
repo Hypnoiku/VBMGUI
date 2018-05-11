@@ -78,6 +78,8 @@ void VBox::getMediums()
 {
 	resetError();
 
+	ByteMath bm;
+
 	SAFEARRAY *mediumArray = NULL;
 
 	rc = virtualBox->get_HardDisks(&mediumArray);
@@ -88,21 +90,25 @@ void VBox::getMediums()
 		if (SUCCEEDED(rc))
 		{
 			mediumNames = new std::string[mediumArray->rgsabound[0].cElements];
-			mediumSizes = new LONG64[mediumArray->rgsabound[0].cElements];
+			mediumSizes = new FLOAT[mediumArray->rgsabound[0].cElements];
+			mediumMaxSizes = new FLOAT[mediumArray->rgsabound[0].cElements];
 			mediumAmount = mediumArray->rgsabound[0].cElements;
 
 			for (ULONG i = 0; i < mediumArray->rgsabound[0].cElements; ++i)
 			{
 				BSTR str;
 				LONG64 size = 0;
+				LONG64 maxSize = 0;
 
 				rc = mediums[i]->get_Name(&str);
 				rc = mediums[i]->get_Size(&size);
+				rc = mediums[i]->get_LogicalSize(&maxSize);
 
 				if (SUCCEEDED(rc))
 				{
 					mediumNames[i] = _com_util::ConvertBSTRToString(str);
-					mediumSizes[i] = size;
+					mediumSizes[i] = bm.bToGB(size);
+					mediumMaxSizes[i] = bm.bToGB(maxSize);
 					SysFreeString(str);
 				}else
 				{

@@ -3,13 +3,15 @@
 #include "VirtualBox.h"
 #include <string>
 #include <comutil.h>
+#include "ByteMath.h"
 
 class VBox
 {
 public:
 	std::string* machineNames;
 	std::string* mediumNames;
-	LONG64* mediumSizes;
+	FLOAT* mediumSizes;
+	FLOAT* mediumMaxSizes;
 	int machineAmount;
 	int mediumAmount;
 	HRESULT errorCode;
