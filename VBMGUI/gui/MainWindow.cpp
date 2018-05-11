@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
 		}
 		else
 		{
-			for (ULONG i = 0; i < virtualBox.machineAmount; i++)
+			for (ULONG i = 0; i < virtualBox.mediumAmount; i++)
 			{
 				ui.listWidget_2->addItem(QString::fromStdString(virtualBox.mediumNames[i] + " - " += std::to_string(virtualBox.mediumSizes[i])));
 			}
