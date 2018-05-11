@@ -2,7 +2,6 @@
 #include <comutil.h>
 #include <comdef.h>
 #include "VirtualBox.h"
-#include <iostream>
 #include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -105,7 +104,7 @@ void MainWindow::openAboutUI()
 	else if(virtualBox.error == 2)
 	{
 		QMessageBox::critical(this, "Fatal error", QString::fromStdString(errors.getErrMsg(3)));
-		QApplication::quit();
+		endApp();
 	}
 	else
 	{

@@ -3,8 +3,6 @@
 #include "VirtualBox.h"
 #include <string>
 #include <comutil.h>
-#include <comdef.h>
-#include <iostream>
 
 class VBox
 {

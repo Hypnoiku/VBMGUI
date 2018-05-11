@@ -1,6 +1,5 @@
 #include "VBox.h"
 #include "VirtualBox_i.c"
-#include <iostream>
 
 VBox::VBox()
 {
