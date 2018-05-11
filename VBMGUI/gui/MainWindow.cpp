@@ -40,11 +40,12 @@ MainWindow::MainWindow(QWidget *parent)
 		{
 			for (ULONG i = 0; i < virtualBox.mediumAmount; i++)
 			{
-				std::stringstream size;
-				std::stringstream maxSize;
-				size << std::fixed << std::setprecision(2) << virtualBox.mediumSizes[i];
-				maxSize << std::fixed << std::setprecision(2) << virtualBox.mediumMaxSizes[i];
-				ui.listWidget_2->addItem(QString::fromStdString(virtualBox.mediumNames[i] + " - " += size.str() + " GB | Max Size: " + maxSize.str() + " GB"));
+				std::string type = virtualBox.mediumSize.type[i];
+				std::string maxType = virtualBox.mediumSize.maxType[i];
+				std::stringstream size, maxSize;
+				size << std::fixed << std::setprecision(2) << virtualBox.mediumSize.sizes[i];
+				maxSize << std::fixed << std::setprecision(2) << virtualBox.mediumSize.maxSizes[i];
+				ui.listWidget_2->addItem(QString::fromStdString(virtualBox.mediumNames[i] + " - " += size.str() + " " + type + " | Max Size: " + maxSize.str() + " " + maxType));
 			}
 		}
 	}

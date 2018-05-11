@@ -5,13 +5,20 @@
 #include <comutil.h>
 #include "ByteMath.h"
 
+struct mediumSizes
+{
+	FLOAT* sizes;
+	FLOAT* maxSizes;
+	std::string* type;
+	std::string* maxType;
+};
+
 class VBox
 {
 public:
 	std::string* machineNames;
 	std::string* mediumNames;
-	FLOAT* mediumSizes;
-	FLOAT* mediumMaxSizes;
+	mediumSizes mediumSize;
 	int machineAmount;
 	int mediumAmount;
 	HRESULT errorCode;
@@ -35,4 +42,3 @@ private:
 
 	void VBox::resetError();
 };
-

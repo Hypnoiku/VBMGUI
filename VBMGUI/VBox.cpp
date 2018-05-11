@@ -90,8 +90,10 @@ void VBox::getMediums()
 		if (SUCCEEDED(rc))
 		{
 			mediumNames = new std::string[mediumArray->rgsabound[0].cElements];
-			mediumSizes = new FLOAT[mediumArray->rgsabound[0].cElements];
-			mediumMaxSizes = new FLOAT[mediumArray->rgsabound[0].cElements];
+			FLOAT* mediumSizes = new FLOAT[mediumArray->rgsabound[0].cElements];
+			FLOAT* mediumMaxSizes = new FLOAT[mediumArray->rgsabound[0].cElements];
+			std::string* sizeTypes = new std::string[mediumArray->rgsabound[0].cElements];
+			std::string* maxSizeTypes = new std::string[mediumArray->rgsabound[0].cElements];
 			mediumAmount = mediumArray->rgsabound[0].cElements;
 
 			for (ULONG i = 0; i < mediumArray->rgsabound[0].cElements; ++i)
@@ -107,8 +109,8 @@ void VBox::getMediums()
 				if (SUCCEEDED(rc))
 				{
 					mediumNames[i] = _com_util::ConvertBSTRToString(str);
-					mediumSizes[i] = bm.bToGB(size);
-					mediumMaxSizes[i] = bm.bToGB(maxSize);
+					mediumSizes[i] = bm.dynConvert(size, sizeTypes[i]);
+					mediumMaxSizes[i] = bm.dynConvert(maxSize, maxSizeTypes[i]);
 					SysFreeString(str);
 				}else
 				{
@@ -116,6 +118,11 @@ void VBox::getMediums()
 					errorCode = rc;
 				}
 			}
+
+			mediumSize.sizes = mediumSizes;
+			mediumSize.maxSizes = mediumMaxSizes;
+			mediumSize.type = sizeTypes;
+			mediumSize.maxType = maxSizeTypes;
 		}
 		else
 		{
