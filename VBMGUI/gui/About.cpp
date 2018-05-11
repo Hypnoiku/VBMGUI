@@ -5,7 +5,7 @@ About::About(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	//this->setWindowFlags(this->windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+	this->setWindowFlags(this->windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
 }
 
 void About::getVers(QString VBoxVer, QString VBoxSDKVer)
