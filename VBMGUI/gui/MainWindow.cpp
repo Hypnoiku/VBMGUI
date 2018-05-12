@@ -4,6 +4,7 @@
 #include "VirtualBox.h"
 #include <QMessageBox>
 #include <iomanip>
+#include "pbTick.h"
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -86,15 +87,16 @@ void MainWindow::compactHDD()
 
 void MainWindow::progressBarStart(IProgress *progress)
 {
-	/*ULONG *pBvalue = 0;
-
-	progress->get_Percent(pBvalue);
-	ui.progressBar->setValue((int)pBvalue);
-
+	QThread *thread = new QThread();
+	pbTick *tick = new pbTick(progress);
+	tick->moveToThread(thread);
 	ui.progressBar->setMaximum(100);
 	ui.progressBar->setMinimum(0);
-	thread.create(progressBarPoll());
-	thread.connect(this, SIGNAL(signalProgress(int)), ui.progressBar, SLOT(setValue(int)));*/
+	ui.progressBar->setValue(0);
+
+	connect(tick, SIGNAL(setPB(int)), ui.progressBar, SLOT(setValue(int)));
+
+	tick->tick();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

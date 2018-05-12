@@ -140,6 +140,7 @@
     <ClCompile Include="gui\About.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="gui\MainWindow.cpp" />
+    <ClCompile Include="pbTick.cpp" />
     <ClCompile Include="VBox.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +163,7 @@
   <ItemGroup>
     <ClInclude Include="ByteMath.h" />
     <ClInclude Include="err.h" />
+    <QtMoc Include="pbTick.h" />
     <ClInclude Include="VBox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

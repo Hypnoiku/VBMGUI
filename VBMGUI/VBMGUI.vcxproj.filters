@@ -48,12 +48,18 @@
     <ClCompile Include="ByteMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pbTick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="gui\About.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="gui\MainWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="pbTick.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
